@@ -54,10 +54,46 @@
 }
 
 .chat-gpt-container #answer pre {
-  margin-top: 10px;
+  /* margin-top: 10px; */
+  border-radius: initial;
+  margin-bottom: 0;
 }
 
 .chat-gpt-container #answer code {
   white-space: pre-wrap;
   word-break: break-all;
+}
+
+.chat-gpt-container .code-block {
+  border-radius: initial;
+  margin: -16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-gpt-container .code-block .copy-btn-wrapper {
+  background-color: #343541;
+  display: flex;
+  justify-content: end;
+  padding: 8px 16px;
+}
+
+.chat-gpt-container .code-block .copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  color: #d9d9e3;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.5s;
+}
+.chat-gpt-container .code-block .copy-btn.copied {
+  background-color: #2da44e;
+}
+
+.chat-gpt-container .code-block .hljs {
+  border-radius: initial;
+  margin: -35px -16px -52px;
+  background: #000;
 }

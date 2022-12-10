@@ -4,6 +4,8 @@ import Browser from 'webextension-polyfill'
 import { fetchSSE } from './fetch-sse.mjs'
 
 const KEY_ACCESS_TOKEN = 'accessToken'
+const OFFICIAL_DOMAIN = 'chat.openai.com'
+const PROXY_DOMAIN = 'gpt.chatapi.art'
 
 const cache = new ExpiryMap(10 * 1000)
 
@@ -11,11 +13,12 @@ async function getAccessToken() {
   if (cache.get(KEY_ACCESS_TOKEN)) {
     return cache.get(KEY_ACCESS_TOKEN)
   }
-  const resp = await fetch('https://chat.openai.com/api/auth/session')
+  const resp = await fetch(`https://${OFFICIAL_DOMAIN}/api/auth/session`)
     .then((r) => r.json())
     .catch(() => ({}))
   if (!resp.accessToken) {
-    throw new Error('UNAUTHORIZED')
+    // throw new Error('UNAUTHORIZED')
+    return ''
   }
   cache.set(KEY_ACCESS_TOKEN, resp.accessToken)
   return resp.accessToken
@@ -29,7 +32,8 @@ async function generateAnswers(port, question) {
     controller.abort()
   })
 
-  await fetchSSE('https://chat.openai.com/backend-api/conversation', {
+  const domain = accessToken ? OFFICIAL_DOMAIN : PROXY_DOMAIN
+  await fetchSSE(`https://${domain}/backend-api/conversation`, {
     method: 'POST',
     signal: controller.signal,
     headers: {
